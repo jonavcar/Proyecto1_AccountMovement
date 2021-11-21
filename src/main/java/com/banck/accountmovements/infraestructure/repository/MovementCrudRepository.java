@@ -77,12 +77,12 @@ public class MovementCrudRepository implements MovementRepository {
 
     @Override
     public Flux<Movement> listByCustomer(String customer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return movementRepository.findAllByCustomer(customer).map(this::MovementDaoToMovement);
     }
 
     @Override
     public Flux<Movement> listByCustomerAndAccount(String customer, String account) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return movementRepository.findAllByCustomerAndAccount(customer, account).map(this::MovementDaoToMovement);
     }
 
     @Override

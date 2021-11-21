@@ -42,9 +42,19 @@ public class MovementController {
         return operations.get(id);
     }
 
-    @GetMapping("/{id}/list")
-    public Flux<Movement> listAccountByCustomer(@PathVariable("id") String id) {
+    @GetMapping("/customer/{id}/list")
+    public Flux<Movement> listByCustomer(@PathVariable("id") String id) {
         return operations.listByCustomer(id);
+    }
+
+    @GetMapping("/account/{id}/list")
+    public Flux<Movement> listByAccount(@PathVariable("id") String id) {
+        return operations.listByAccount(id);
+    }
+
+    @GetMapping("/customer-account/{customer}/{account}/list")
+    public Flux<Movement> listByCustomerAndAccount(@PathVariable("customer") String customer, @PathVariable("account") String account) {
+        return operations.listByCustomerAndAccount(customer, account);
     }
 
     @PostMapping

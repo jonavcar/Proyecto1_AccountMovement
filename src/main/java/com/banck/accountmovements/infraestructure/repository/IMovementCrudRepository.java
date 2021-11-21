@@ -11,4 +11,8 @@ import reactor.core.publisher.Flux;
 public interface IMovementCrudRepository extends ReactiveCrudRepository<MovementDao, String> {
 
     Flux<MovementDao> findAllByAccount(String account);
+
+    Flux<MovementDao> findAllByCustomer(String customer);
+
+    Flux<MovementDao> findAllByCustomerAndAccount(String customer, String account);
 }
