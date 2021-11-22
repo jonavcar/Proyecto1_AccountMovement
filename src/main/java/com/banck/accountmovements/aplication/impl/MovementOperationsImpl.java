@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono;
 import java.util.concurrent.atomic.AtomicReference;
 import com.banck.accountmovements.aplication.MovementOperations;
 import com.banck.accountmovements.aplication.model.MovementRepository;
-import com.banck.accountmovements.utils.AccountType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,8 +36,7 @@ public class MovementOperationsImpl implements MovementOperations {
         AtomicReference<Mono<Movement>> atAccount = new AtomicReference<>();
         Flux<Movement> lstMovements = movementRepository.listByAccount(movement.getAccount());
 
-        //Validar credito Epresa
-        if (AccountType.SAVINGS_ACCOUNT.equals(movement.getAccountType())) {
+        /*if (AccountType.SAVINGS_ACCOUNT.equals(movement.getAccountType())) {
 
             lstMovements.filter(act -> act.getMovementType().equals(movement.getMovementType()))
                     .count()
@@ -62,9 +60,10 @@ public class MovementOperationsImpl implements MovementOperations {
                     });
         } else {
             atAccount.set(movementRepository.create(movement));
-        }
+        }*/
+        atAccount.set(movementRepository.create(movement));
         try {
-            Thread.sleep(6000);
+            Thread.sleep(300);
         } catch (InterruptedException ex) {
             Logger.getLogger(MovementOperationsImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -9,13 +9,13 @@ package com.banck.accountmovements.utils;
  * @author jonavcar
  */
 public enum MovementType {
-    CHARGE("C") {
+    CHARGE("CG") {
         @Override
         public boolean equals(String movementType) {
             return value.equals(movementType);
         }
     },
-    PAYMENT("P") {
+    PAYMENT("AB") {
         @Override
         public boolean equals(String movementType) {
             return value.equals(movementType);

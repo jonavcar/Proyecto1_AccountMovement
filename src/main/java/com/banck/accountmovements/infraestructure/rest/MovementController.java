@@ -23,7 +23,7 @@ import com.banck.accountmovements.aplication.MovementOperations;
  * @author jonavcar
  */
 @RestController
-@RequestMapping("/movement")
+@RequestMapping("/account-movement")
 @RequiredArgsConstructor
 public class MovementController {
 

@@ -42,7 +42,7 @@ public class MovementCrudRepository implements MovementRepository {
 
     @Override
     public void delete(String movement) {
-        movementRepository.deleteById(movement);
+        movementRepository.deleteById(movement).subscribe();
     }
 
     public Movement MovementDaoToMovement(MovementDao md) {
