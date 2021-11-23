@@ -17,6 +17,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import com.banck.accountmovements.aplication.MovementOperations;
+import com.banck.accountmovements.utils.AccountType;
+import com.banck.accountmovements.utils.MovementType;
+import java.util.stream.Collectors;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
@@ -58,12 +62,43 @@ public class MovementController {
     }
 
     @PostMapping
-    public Mono<Movement> create(@RequestBody Movement c) {
+    public Mono<ResponseEntity> create(@RequestBody Movement c) {
         c.setMovement(c.getCustomer() + "-" + getRandomNumberString());
         c.setDate(dateTime.format(formatDate));
         c.setTime(dateTime.format(formatTime));
         c.setCorrect(true);
-        return operations.create(c);
+        return Mono.just(c).flatMap(o -> {
+            return operations.listByCustomerAndAccount(c.getCustomer(), c.getAccount()).collect(Collectors.summingInt(Movement::getAmount)).flatMap(r -> {
+
+                boolean isAccountType = false;
+                for (AccountType tc : AccountType.values()) {
+                    if (c.getAccountType().equals(tc.value)) {
+                        isAccountType = true;
+                    }
+                }
+
+                boolean isMovementType = false;
+                for (MovementType tc : MovementType.values()) {
+                    if (c.getMovementType().equals(tc.value)) {
+                        isMovementType = true;
+                    }
+                }
+                if (!isAccountType) {
+                    return Mono.just(ResponseEntity.ok("El codigo de Tipo Cuenta (" + c.getAccountType() + "), no existe!"));
+                }
+                if (!isMovementType) {
+                    return Mono.just(ResponseEntity.ok("El codigo de Tipo Movimiento (" + c.getMovementType() + "), no existe!"));
+                }
+
+                if ((r + c.getAmount()) < 0) {
+                    return Mono.just(ResponseEntity.ok("El movimiento a efectuar sobrepasa el saldo disponible."));
+                } else {
+                    return operations.create(c).flatMap(i -> {
+                        return Mono.just(ResponseEntity.ok(i));
+                    });
+                }
+            });
+        });
     }
 
     @PutMapping("/{id}")
